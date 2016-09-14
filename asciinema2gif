@@ -44,11 +44,12 @@ function usage {
     usage: ${program} [options] <asciinema_number|asciinema_api_url>
 
     options:
-      -s <size>, --size <size>      One of 'small', 'medium', 'big'
-      -p <speed>, --speed <speed>   Any integer (whole number) to multiply regular speed by
-      -t <theme>, --theme <theme>   One of 'asciinema', 'tango', 'solarized-dark', 'solarized-light', 'monokai'
-      -o <file>, --output <file>    File to write to (defaults to 'asciicast.gif' in current directory)
-      -h, --help                    Show this help.
+      -s <size>, --size <size>        One of 'small', 'medium', 'big'
+      -p <speed>, --speed <speed>     Any integer (whole number) to multiply regular speed by
+      -t <theme>, --theme <theme>     One of 'asciinema', 'tango', 'solarized-dark', 'solarized-light', 'monokai'
+      -o <file>, --output <file>      File to write to (defaults to 'asciicast.gif' in current directory)
+      -S <source>, --source <source>  One of 'asciinema' or 'self' (for self-hosted). Defaults to 'asciinema'
+      -h, --help                      Show this help.
   " | sed -E 's/^ {4}//'
 }
 
@@ -74,6 +75,10 @@ while [[ "${1}" ]]; do
       output_file="${2}"
       shift
       ;;
+    -S | --source)
+      source="${2}"
+      shift
+      ;;
     -*)
       syntax_error "unrecognized option: ${1}"
       ;;
@@ -95,9 +100,10 @@ else
   asciinema_url="${1}"
 fi
 
-# Show warning if a URL not containing '/api/asciicasts/' is given
-if [[ $asciinema_url != *'/api/asciicasts/'* ]]; then
-  echo -e "\n$(tput setaf 1)Wrong URL format. See https://github.com/tav/asciinema2gif#url-format.$(tput sgr0)\n"
+# Show warning if a URL not containing '/api/asciicasts/' is given and we are not self-hosting.
+if ! [[ "$source" = self ]] && [[ $asciinema_url != *'/api/asciicasts/'* ]]; then
+  echo -e "\n$(tput setaf 1)Wrong URL format. See https://github.com/tav/asciinema2gif#url-format."
+  echo -e "Or, use the '--source self' option for a self-hosted URL.$(tput sgr0)\n"
   exit 1
 fi
 

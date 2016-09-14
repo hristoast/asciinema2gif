@@ -16,11 +16,12 @@ README files on GitHub repos. This tool provides a solution for that.
 asciinema2gif [options] <asciinema_number|asciinema_api_url>
 
   options:
-    -s <size>, --size <size>      One of 'small', 'medium', 'big'
-    -p <speed>, --speed <speed>   Any integer (whole number) to multiply regular speed by
-    -t <theme>, --theme <theme>   One of 'asciinema', 'tango', 'solarized-dark', 'solarized-light', 'monokai'
-    -o <file>, --output <file>    File to write to (defaults to 'asciicast.gif' in current directory)
-    -h, --help                    Show this help.
+    -s <size>, --size <size>        One of 'small', 'medium', 'big'
+    -p <speed>, --speed <speed>     Any integer (whole number) to multiply regular speed by
+    -t <theme>, --theme <theme>     One of 'asciinema', 'tango', 'solarized-dark', 'solarized-light', 'monokai'
+    -o <file>, --output <file>      File to write to (defaults to 'asciicast.gif' in current directory)
+    -S <source>, --source <source>  One of 'asciinema' or 'self' (for self-hosted). Defaults to 'asciinema'
+    -h, --help                      Show this help.
 ```
 
 Examples:
@@ -37,9 +38,17 @@ $ asciinema2gif --theme solarized-light -o "${HOME}/Desktop/another.gif" https:/
 
 In this case an `another.gif` file will be generated on your Desktop. Using the full URL is useful if you want to get an asciicast not from the official website.
 
+```bash
+$ asciinema2gif --source self https://my-asciinema.tld/
+```
+
+Grab a self-hosted asciicast for conversion.
+
 #### URL Format
 
 `asciinema2gif` works by visiting the given webpage, starting the asciicast, screenshotting it repeatedly, and finally stitching it together. The `/api/asciicasts/` format of an asciinema website (e.g. https://asciinema.org/api/asciicasts/8332), as opposed to the main `/a/` format (e.g. https://asciinema.org/a/8332), makes this operation easier (see [usage](#usage)), hence why it is a requirement.
+
+This does not apply if using a self-hosted URL.
 
 ### Requirements
 
